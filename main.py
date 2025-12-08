@@ -47,7 +47,7 @@ models = {}
 horizons = [24, 168]
 for region in regions:
     for horizon in horizons:
-        model_path = f'models/NBEATS_{region}_{horizon}h_model.pkl'
+        model_path = f'models/xgboost_{region}_{horizon}h_model.pkl'
         try:
             models[f'{region}_{horizon}'] = joblib.load(model_path)
             print(f"✅ Loaded model: {model_path}")
@@ -76,11 +76,17 @@ async def root():
 
 #=========== Authentication Dependency ============
 def verify_api_key(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    '''
+    Docstring for verify_api_key
+    
+    :param credentials: Description
+    :type credentials: HTTPAuthorizationCredentials
+    '''
     if credentials.credentials != API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API Key")
     return True
 
-@app.post("/forecast", response_model=ForecastResponse)
+@app.get("/forecast", response_model=ForecastResponse)
 async def get_forecast(request: ForecastRequest, authorized: bool = Depends(verify_api_key)):
     """
     Generate electricity load forecast for a specific region.
@@ -113,12 +119,11 @@ async def get_forecast(request: ForecastRequest, authorized: bool = Depends(veri
         raise HTTPException(status_code=500, detail="Historical data not available")
     
     try:
-        # Make prediction using historical data
-        forecast_df = model.predict(df=region_data)
+        # Get prediction
+        start = pd.to_datetime(region_data['date'].max())
+        timestamps = pd.date_range(start=start, periods=prediction_period, freq='H').strftime('%Y-%m-%d %H:%M:%S').tolist()
+        forecast_list= model.predict(timestamps)
         
-        # Extract forecast values and timestamps
-        forecast_list = forecast_df['NBEATS'].tolist()
-        timestamps = forecast_df['date'].dt.strftime('%Y-%m-%d %H:%M:%S').tolist()
         
         return ForecastResponse(
             region=region,

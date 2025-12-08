@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -54,7 +56,9 @@ st.markdown(f"### Forecasting for **{region}** region - **{forecast_horizon}h ho
 
 
 # ============ Generate Forecast ============
-API_KEY = "HAKOUNA_PATATA"  # Replace with your actual API key
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+    
 
 @st.cache_data
 def generate_forecast(region, horizon):
@@ -65,7 +69,7 @@ def generate_forecast(region, horizon):
     Returns forecast values, timestamps, historical values, and historical timestamps.
     """
     try:
-        response = requests.post(
+        response = requests.get(
             "http://localhost:8000/forecast",
             json={
                 "region": region,
@@ -314,6 +318,6 @@ with col2:
 st.markdown("---")
 st.markdown("""
     <div style='text-align: center'>
-        <p>🚀 Powered by NBeats Deep Learning Model | Last Updated: """ + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + """</p>
+        <p>🚀 Powered by XGBoost Model | Last Updated: """ + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + """</p>
     </div>
     """, unsafe_allow_html=True)
