@@ -1,0 +1,41 @@
+# Core Data Science Libraries
+pandas==2.2.2
+numpy==1.26.4
+matplotlib==3.10.7
+seaborn==0.13.2
+
+# Machine Learning & Deep Learning
+datasets==4.4.1
+transformers==4.57.3
+huggingface-hub==0.36.0
+torch==2.2.2
+pytorch-lightning==2.6.0
+torchmetrics==1.8.2
+
+# Time Series Forecasting
+neuralforecast==1.7.0
+coreforecast==0.0.16
+utilsforecast==0.2.15
+
+# Statistical Analysis
+statsmodels==0.14.6
+python-dateutil==2.9.0.post0
+scikit-learn==1.7.2
+scipy==1.13.0
+
+# FastAPI Backend
+fastapi==0.124.0
+uvicorn==0.38.0
+python-dotenv==1.2.1
+pydantic==2.12.5
+
+# Streamlit Frontend
+streamlit==1.52.1
+plotly==6.5.0
+requests==2.32.5
+
+# Model Serialization
+joblib==1.5.2
+
+# Excel Export Support
+openpyxl==3.1.5
